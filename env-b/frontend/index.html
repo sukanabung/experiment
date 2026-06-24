@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List App - Docker Compose</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; }
+        .container { max-width: 800px; margin: 50px auto; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #1a73e8; margin-bottom: 20px; }
+        .auth-section { display: flex; gap: 10px; margin-bottom: 20px; }
+        .auth-section input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        .auth-section button { padding: 10px 20px; background: #1a73e8; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .auth-section button:hover { background: #1557b0; }
+        .todo-form { display: flex; gap: 10px; margin-bottom: 20px; }
+        .todo-form input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        .todo-form button { padding: 10px 20px; background: #34a853; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .todo-form button:hover { background: #2d9248; }
+        .todo-list { list-style: none; }
+        .todo-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; }
+        .todo-item .title { flex: 1; }
+        .todo-item .delete-btn { background: #ea4335; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; }
+        .todo-item .delete-btn:hover { background: #d33426; }
+        .error { color: #ea4335; margin: 10px 0; }
+        .success { color: #34a853; margin: 10px 0; }
+        .status { color: #5f6368; font-size: 0.9em; margin-top: 20px; }
+        #token-info { background: #f8f9fa; padding: 10px; border-radius: 5px; margin: 10px 0; display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 To-Do List App - Docker Compose</h1>
+        
+        <div id="message" class="error"></div>
+        <div id="token-info"></div>
+        
+        <!-- Auth Section -->
+        <div class="auth-section">
+            <input type="text" id="username" placeholder="Username" value="testuser1">
+            <input type="password" id="password" placeholder="Password" value="testpass123">
+            <button onclick="login()">Login</button>
+            <button onclick="logout()">Logout</button>
+        </div>
+ 
+        <!-- Todo Form -->
+        <div class="todo-form">
+            <input type="text" id="todo-title" placeholder="Add new todo...">
+            <button onclick="addTodo()">Add Todo</button>
+        </div>
+ 
+        <!-- Todo List -->
+        <ul class="todo-list" id="todo-list">
+            <li style="color: #5f6368; text-align: center; padding: 20px;">Please login to see your todos</li>
+        </ul>
+ 
+        <div class="status">
+            Status: <span id="status">Not logged in</span>
+            <br>
+            <span id="env-info">Environment: Docker Compose (Lingkungan A)</span>
+        </div>
+    </div>
+ 
+    <script>
+        let token = localStorage.getItem('token') || null;
+        let currentUser = null;
+ 
+        function showMessage(msg, type = 'error') {
+            const el = document.getElementById('message');
+            el.textContent = msg;
+            el.className = type;
+            setTimeout(() => { el.textContent = ''; }, 5000);
+        }
+ 
+        function updateStatus() {
+            const status = document.getElementById('status');
+            if (token) {
+                status.textContent = 'Logged in ✅';
+                status.style.color = '#34a853';
+                document.getElementById('token-info').style.display = 'block';
+                document.getElementById('token-info').innerHTML = 
+                    `<strong>Token:</strong> ${token.substring(0, 20)}...`;
+            } else {
+                status.textContent = 'Not logged in ❌';
+                status.style.color = '#ea4335';
+                document.getElementById('token-info').style.display = 'none';
+            }
+        }
+ 
+        async function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+ 
+            try {
+                const response = await fetch('http://localhost:3000/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+ 
+                const data = await response.json();
+                if (response.ok) {
+                    token = data.token;
+                    localStorage.setItem('token', token);
+                    currentUser = data.user;
+                    showMessage('Login successful!', 'success');
+                    updateStatus();
+                    loadTodos();
+                } else {
+                    showMessage(data.error || 'Login failed');
+                }
+            } catch (error) {
+                showMessage('Error: ' + error.message);
+            }
+        }
+ 
+        async function logout() {
+            if (token) {
+                try {
+                    await fetch('http://localhost:3000/api/auth/logout', {
+                        method: 'POST',
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                } catch (e) {}
+            }
+            token = null;
+            localStorage.removeItem('token');
+            currentUser = null;
+            showMessage('Logged out', 'success');
+            updateStatus();
+            document.getElementById('todo-list').innerHTML = '<li style="color: #5f6368; text-align: center; padding: 20px;">Please login to see your todos</li>';
+        }
+ 
+        async function loadTodos() {
+            if (!token) return;
+ 
+            try {
+                const response = await fetch('http://localhost:8080/api/todos', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+ 
+                if (response.status === 401) {
+                    token = null;
+                    localStorage.removeItem('token');
+                    updateStatus();
+                    return;
+                }
+ 
+                const data = await response.json();
+                const list = document.getElementById('todo-list');
+                
+                if (data.todos && data.todos.length > 0) {
+                    list.innerHTML = data.todos.map(todo => `
+                        <li class="todo-item">
+                            <span class="title">${todo.title} ${todo.completed ? '✅' : ''}</span>
+                            <button class="delete-btn" onclick="deleteTodo(${todo.id})">Delete</button>
+                        </li>
+                    `).join('');
+                } else {
+                    list.innerHTML = '<li style="color: #5f6368; text-align: center; padding: 20px;">No todos yet. Add one above!</li>';
+                }
+            } catch (error) {
+                console.error('Load todos error:', error);
+            }
+        }
+ 
+        async function addTodo() {
+            if (!token) {
+                showMessage('Please login first');
+                return;
+            }
+ 
+            const title = document.getElementById('todo-title').value.trim();
+            if (!title) {
+                showMessage('Please enter a todo title');
+                return;
+            }
+ 
+            try {
+                const response = await fetch('http://localhost:8080/api/todos', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ title, description: 'Created from web UI' })
+                });
+ 
+                if (response.ok) {
+                    document.getElementById('todo-title').value = '';
+                    showMessage('Todo added!', 'success');
+                    loadTodos();
+                } else {
+                    const data = await response.json();
+                    showMessage(data.error || 'Failed to add todo');
+                }
+            } catch (error) {
+                showMessage('Error: ' + error.message);
+            }
+        }
+ 
+        async function deleteTodo(id) {
+            if (!token) return;
+ 
+            try {
+                const response = await fetch(`http://localhost:8080/api/todos/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+ 
+                if (response.ok) {
+                    showMessage('Todo deleted!', 'success');
+                    loadTodos();
+                }
+            } catch (error) {
+                console.error('Delete error:', error);
+            }
+        }
+ 
+        // Auto-login jika token tersimpan
+        if (token) {
+            updateStatus();
+            loadTodos();
+        } else {
+            updateStatus();
+        }
+ 
+        // Check status setiap 30 detik
+        setInterval(() => {
+            if (token) {
+                // Refresh token check
+                fetch('http://localhost:3000/api/auth/validate', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                }).then(r => {
+                    if (r.status === 401) {
+                        token = null;
+                        localStorage.removeItem('token');
+                        updateStatus();
+                        showMessage('Session expired, please login again');
+                    }
+                }).catch(() => {});
+            }
+        }, 30000);
+    </script>
+</body>
+</html>

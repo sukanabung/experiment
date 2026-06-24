@@ -1,0 +1,271 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1780569549684,32,GET Frontend /,200,OK,Users 1-1,text,true,,582,157,1,1,http://host.docker.internal:8080/,32,0,25
+1780569549718,20,POST /api/auth/login,400,Bad Request,Users 1-1,text,false,,274,240,1,1,http://host.docker.internal:3003/api/auth/login,20,0,5
+1780569549765,9,GET /api/todos,401,Unauthorized,Users 1-1,text,false,,281,190,1,1,http://host.docker.internal:3001/api/todos,9,0,3
+1780569549775,3,GET Frontend /,200,OK,Users 1-1,text,true,,582,157,1,1,http://host.docker.internal:8080/,3,0,2
+1780569549779,73,POST /api/auth/login,200,OK,Users 1-1,text,true,,425,244,1,1,http://host.docker.internal:3003/api/auth/login,73,0,2
+1780569549853,18,GET /api/todos,200,OK,Users 1-1,text,true,,312,363,1,1,http://host.docker.internal:3001/api/todos,17,0,2
+1780569549871,3,GET Frontend /,200,OK,Users 1-1,text,true,,582,157,1,1,http://host.docker.internal:8080/,3,0,2
+1780569549874,70,POST /api/auth/login,200,OK,Users 1-1,text,true,,425,244,1,1,http://host.docker.internal:3003/api/auth/login,70,0,3
+1780569549945,8,GET /api/todos,200,OK,Users 1-1,text,true,,312,363,1,1,http://host.docker.internal:3001/api/todos,8,0,2
+1780569549954,8,GET Frontend /,200,OK,Users 1-1,text,true,,582,157,1,1,http://host.docker.internal:8080/,8,0,2
+1780569549962,69,POST /api/auth/login,200,OK,Users 1-1,text,true,,425,244,1,1,http://host.docker.internal:3003/api/auth/login,69,0,2
+1780569550031,9,GET /api/todos,200,OK,Users 1-1,text,true,,312,363,1,1,http://host.docker.internal:3001/api/todos,9,0,2
+1780569550040,4,GET Frontend /,200,OK,Users 1-1,text,true,,582,157,1,1,http://host.docker.internal:8080/,4,0,2
+1780569550044,66,POST /api/auth/login,200,OK,Users 1-1,text,true,,425,244,1,1,http://host.docker.internal:3003/api/auth/login,66,0,2
+1780569550111,8,GET /api/todos,200,OK,Users 1-1,text,true,,312,363,1,1,http://host.docker.internal:3001/api/todos,8,0,2
+1780569550119,3,GET Frontend /,200,OK,Users 1-1,text,true,,582,157,1,1,http://host.docker.internal:8080/,3,0,2
+1780569550122,65,POST /api/auth/login,200,OK,Users 1-1,text,true,,425,244,1,1,http://host.docker.internal:3003/api/auth/login,65,0,2
+1780569550188,7,GET /api/todos,200,OK,Users 1-1,text,true,,312,363,1,1,http://host.docker.internal:3001/api/todos,7,0,2
+1780569550201,3,GET Frontend /,200,OK,Users 1-1,text,true,,582,157,1,1,http://host.docker.internal:8080/,3,0,2
+1780569550204,6,POST /api/auth/login,400,Bad Request,Users 1-1,text,false,,274,240,1,1,http://host.docker.internal:3003/api/auth/login,6,0,2
+1780569550211,6,GET /api/todos,401,Unauthorized,Users 1-1,text,false,,281,190,1,1,http://host.docker.internal:3001/api/todos,6,0,2
+1780569550217,3,GET Frontend /,200,OK,Users 1-1,text,true,,582,157,1,1,http://host.docker.internal:8080/,3,0,2
+1780569550220,63,POST /api/auth/login,200,OK,Users 1-1,text,true,,425,244,1,1,http://host.docker.internal:3003/api/auth/login,63,0,2
+1780569550284,7,GET /api/todos,200,OK,Users 1-1,text,true,,312,363,1,1,http://host.docker.internal:3001/api/todos,7,0,2
+1780569550292,3,GET Frontend /,200,OK,Users 1-1,text,true,,582,157,1,1,http://host.docker.internal:8080/,3,0,1
+1780569550295,63,POST /api/auth/login,200,OK,Users 1-1,text,true,,425,244,1,1,http://host.docker.internal:3003/api/auth/login,63,0,1
+1780569550359,8,GET /api/todos,200,OK,Users 1-1,text,true,,312,363,1,1,http://host.docker.internal:3001/api/todos,7,0,2
+1780569550594,5,GET Frontend /,200,OK,Users 1-2,text,true,,582,157,2,2,http://host.docker.internal:8080/,5,0,3
+1780569550600,62,POST /api/auth/login,200,OK,Users 1-2,text,true,,425,244,2,2,http://host.docker.internal:3003/api/auth/login,62,0,2
+1780569550663,9,GET /api/todos,200,OK,Users 1-2,text,true,,312,363,2,2,http://host.docker.internal:3001/api/todos,9,0,2
+1780569550672,3,GET Frontend /,200,OK,Users 1-2,text,true,,582,157,2,2,http://host.docker.internal:8080/,3,0,2
+1780569550675,65,POST /api/auth/login,200,OK,Users 1-2,text,true,,425,244,2,2,http://host.docker.internal:3003/api/auth/login,65,0,2
+1780569550740,8,GET /api/todos,200,OK,Users 1-2,text,true,,312,363,2,2,http://host.docker.internal:3001/api/todos,8,0,2
+1780569550753,3,GET Frontend /,200,OK,Users 1-2,text,true,,582,157,2,2,http://host.docker.internal:8080/,3,0,2
+1780569550757,4,POST /api/auth/login,400,Bad Request,Users 1-2,text,false,,274,240,2,2,http://host.docker.internal:3003/api/auth/login,4,0,1
+1780569550761,6,GET /api/todos,401,Unauthorized,Users 1-2,text,false,,281,190,2,2,http://host.docker.internal:3001/api/todos,5,0,1
+1780569550767,3,GET Frontend /,200,OK,Users 1-2,text,true,,582,157,2,2,http://host.docker.internal:8080/,3,0,2
+1780569550770,69,POST /api/auth/login,200,OK,Users 1-2,text,true,,425,244,2,2,http://host.docker.internal:3003/api/auth/login,69,0,2
+1780569550840,7,GET /api/todos,200,OK,Users 1-2,text,true,,312,363,2,2,http://host.docker.internal:3001/api/todos,7,0,2
+1780569550847,3,GET Frontend /,200,OK,Users 1-2,text,true,,582,157,2,2,http://host.docker.internal:8080/,3,0,2
+1780569550851,65,POST /api/auth/login,200,OK,Users 1-2,text,true,,425,244,2,2,http://host.docker.internal:3003/api/auth/login,64,0,1
+1780569550916,7,GET /api/todos,200,OK,Users 1-2,text,true,,312,363,2,2,http://host.docker.internal:3001/api/todos,7,0,2
+1780569550924,3,GET Frontend /,200,OK,Users 1-2,text,true,,582,157,2,2,http://host.docker.internal:8080/,3,0,2
+1780569550927,64,POST /api/auth/login,200,OK,Users 1-2,text,true,,425,244,2,2,http://host.docker.internal:3003/api/auth/login,64,0,2
+1780569550991,8,GET /api/todos,200,OK,Users 1-2,text,true,,312,363,2,2,http://host.docker.internal:3001/api/todos,8,0,2
+1780569550999,4,GET Frontend /,200,OK,Users 1-2,text,true,,582,157,2,2,http://host.docker.internal:8080/,4,0,2
+1780569551003,64,POST /api/auth/login,200,OK,Users 1-2,text,true,,425,244,2,2,http://host.docker.internal:3003/api/auth/login,64,0,1
+1780569551068,7,GET /api/todos,200,OK,Users 1-2,text,true,,312,363,2,2,http://host.docker.internal:3001/api/todos,7,0,1
+1780569551075,3,GET Frontend /,200,OK,Users 1-2,text,true,,582,157,2,2,http://host.docker.internal:8080/,3,0,2
+1780569551078,70,POST /api/auth/login,200,OK,Users 1-2,text,true,,425,244,2,2,http://host.docker.internal:3003/api/auth/login,70,0,2
+1780569551148,9,GET /api/todos,200,OK,Users 1-2,text,true,,312,363,2,2,http://host.docker.internal:3001/api/todos,9,0,2
+1780569551162,3,GET Frontend /,200,OK,Users 1-2,text,true,,582,157,2,2,http://host.docker.internal:8080/,3,0,2
+1780569551166,6,POST /api/auth/login,400,Bad Request,Users 1-2,text,false,,274,240,2,2,http://host.docker.internal:3003/api/auth/login,5,0,2
+1780569551172,7,GET /api/todos,401,Unauthorized,Users 1-2,text,false,,281,190,2,2,http://host.docker.internal:3001/api/todos,7,0,3
+1780569551179,4,GET Frontend /,200,OK,Users 1-2,text,true,,582,157,2,2,http://host.docker.internal:8080/,4,0,2
+1780569551183,66,POST /api/auth/login,200,OK,Users 1-2,text,true,,425,244,2,2,http://host.docker.internal:3003/api/auth/login,66,0,2
+1780569551250,7,GET /api/todos,200,OK,Users 1-2,text,true,,312,363,2,2,http://host.docker.internal:3001/api/todos,7,0,2
+1780569551258,3,GET Frontend /,200,OK,Users 1-2,text,true,,582,157,2,2,http://host.docker.internal:8080/,2,0,1
+1780569551261,65,POST /api/auth/login,200,OK,Users 1-2,text,true,,425,244,2,2,http://host.docker.internal:3003/api/auth/login,65,0,1
+1780569551326,8,GET /api/todos,200,OK,Users 1-2,text,true,,312,363,2,2,http://host.docker.internal:3001/api/todos,7,0,2
+1780569551334,2,GET Frontend /,200,OK,Users 1-2,text,true,,582,157,2,2,http://host.docker.internal:8080/,2,0,1
+1780569551337,64,POST /api/auth/login,200,OK,Users 1-2,text,true,,425,244,2,2,http://host.docker.internal:3003/api/auth/login,64,0,1
+1780569551402,7,GET /api/todos,200,OK,Users 1-2,text,true,,312,363,2,2,http://host.docker.internal:3001/api/todos,6,0,1
+1780569551409,3,GET Frontend /,200,OK,Users 1-2,text,true,,582,157,2,2,http://host.docker.internal:8080/,3,0,2
+1780569551413,64,POST /api/auth/login,200,OK,Users 1-2,text,true,,425,244,2,2,http://host.docker.internal:3003/api/auth/login,64,0,1
+1780569551477,8,GET /api/todos,200,OK,Users 1-2,text,true,,312,363,2,2,http://host.docker.internal:3001/api/todos,8,0,2
+1780569551486,4,GET Frontend /,200,OK,Users 1-2,text,true,,582,157,2,2,http://host.docker.internal:8080/,4,0,2
+1780569551490,63,POST /api/auth/login,200,OK,Users 1-2,text,true,,425,244,2,2,http://host.docker.internal:3003/api/auth/login,63,0,2
+1780569551553,8,GET /api/todos,200,OK,Users 1-2,text,true,,312,363,2,2,http://host.docker.internal:3001/api/todos,8,0,2
+1780569551565,3,GET Frontend /,200,OK,Users 1-2,text,true,,582,157,2,2,http://host.docker.internal:8080/,3,0,2
+1780569551569,4,POST /api/auth/login,400,Bad Request,Users 1-2,text,false,,274,240,2,2,http://host.docker.internal:3003/api/auth/login,4,0,2
+1780569551574,6,GET /api/todos,401,Unauthorized,Users 1-2,text,false,,281,190,2,2,http://host.docker.internal:3001/api/todos,6,0,1
+1780569551580,3,GET Frontend /,200,OK,Users 1-2,text,true,,582,157,2,2,http://host.docker.internal:8080/,3,0,2
+1780569551594,4,GET Frontend /,200,OK,Users 1-3,text,true,,582,157,3,3,http://host.docker.internal:8080/,4,0,2
+1780569551583,67,POST /api/auth/login,200,OK,Users 1-2,text,true,,425,244,3,3,http://host.docker.internal:3003/api/auth/login,67,0,2
+1780569551599,113,POST /api/auth/login,200,OK,Users 1-3,text,true,,425,244,3,3,http://host.docker.internal:3003/api/auth/login,113,0,2
+1780569551650,65,GET /api/todos,200,OK,Users 1-2,text,true,,312,363,3,3,http://host.docker.internal:3001/api/todos,64,0,2
+1780569551715,4,GET Frontend /,200,OK,Users 1-2,text,true,,582,157,3,3,http://host.docker.internal:8080/,4,0,2
+1780569551714,8,GET /api/todos,200,OK,Users 1-3,text,true,,312,363,3,3,http://host.docker.internal:3001/api/todos,7,0,1
+1780569551722,3,GET Frontend /,200,OK,Users 1-3,text,true,,582,157,3,3,http://host.docker.internal:8080/,3,0,2
+1780569551719,66,POST /api/auth/login,200,OK,Users 1-2,text,true,,425,244,3,3,http://host.docker.internal:3003/api/auth/login,66,0,2
+1780569551726,118,POST /api/auth/login,200,OK,Users 1-3,text,true,,425,244,3,3,http://host.docker.internal:3003/api/auth/login,118,0,1
+1780569551786,60,GET /api/todos,200,OK,Users 1-2,text,true,,312,363,3,3,http://host.docker.internal:3001/api/todos,60,0,1
+1780569551846,4,GET Frontend /,200,OK,Users 1-2,text,true,,582,157,3,3,http://host.docker.internal:8080/,4,0,2
+1780569551845,7,GET /api/todos,200,OK,Users 1-3,text,true,,312,363,3,3,http://host.docker.internal:3001/api/todos,7,0,2
+1780569551850,65,POST /api/auth/login,200,OK,Users 1-2,text,true,,425,244,3,3,http://host.docker.internal:3003/api/auth/login,65,0,2
+1780569551915,7,GET /api/todos,200,OK,Users 1-2,text,true,,312,363,3,3,http://host.docker.internal:3001/api/todos,7,0,2
+1780569551923,3,GET Frontend /,200,OK,Users 1-2,text,true,,582,157,3,3,http://host.docker.internal:8080/,3,0,2
+1780569551927,66,POST /api/auth/login,200,OK,Users 1-2,text,true,,425,244,3,3,http://host.docker.internal:3003/api/auth/login,66,0,1
+1780569551994,7,GET /api/todos,200,OK,Users 1-2,text,true,,312,363,3,3,http://host.docker.internal:3001/api/todos,7,0,1
+1780569552001,3,GET Frontend /,200,OK,Users 1-2,text,true,,582,157,3,3,http://host.docker.internal:8080/,3,0,2
+1780569552005,65,POST /api/auth/login,200,OK,Users 1-2,text,true,,425,244,3,3,http://host.docker.internal:3003/api/auth/login,65,0,1
+1780569552070,10,GET /api/todos,200,OK,Users 1-2,text,true,,312,363,3,3,http://host.docker.internal:3001/api/todos,10,0,2
+1780569552080,3,GET Frontend /,200,OK,Users 1-2,text,true,,582,157,3,3,http://host.docker.internal:8080/,3,0,2
+1780569552083,64,POST /api/auth/login,200,OK,Users 1-2,text,true,,425,244,3,3,http://host.docker.internal:3003/api/auth/login,64,0,2
+1780569552148,6,GET /api/todos,200,OK,Users 1-2,text,true,,312,363,3,3,http://host.docker.internal:3001/api/todos,6,0,1
+1780569552154,4,GET Frontend /,200,OK,Users 1-2,text,true,,582,157,3,3,http://host.docker.internal:8080/,4,0,2
+1780569552158,69,POST /api/auth/login,200,OK,Users 1-2,text,true,,425,244,3,3,http://host.docker.internal:3003/api/auth/login,69,0,1
+1780569552227,8,GET /api/todos,200,OK,Users 1-2,text,true,,312,363,3,3,http://host.docker.internal:3001/api/todos,8,0,2
+1780569552235,3,GET Frontend /,200,OK,Users 1-2,text,true,,582,157,3,3,http://host.docker.internal:8080/,3,0,2
+1780569552238,65,POST /api/auth/login,200,OK,Users 1-2,text,true,,425,244,3,3,http://host.docker.internal:3003/api/auth/login,65,0,2
+1780569552304,7,GET /api/todos,200,OK,Users 1-2,text,true,,312,363,3,3,http://host.docker.internal:3001/api/todos,7,0,2
+1780569552316,4,GET Frontend /,200,OK,Users 1-2,text,true,,582,157,3,3,http://host.docker.internal:8080/,4,0,2
+1780569552320,4,POST /api/auth/login,400,Bad Request,Users 1-2,text,false,,274,240,3,3,http://host.docker.internal:3003/api/auth/login,4,0,2
+1780569552325,6,GET /api/todos,401,Unauthorized,Users 1-2,text,false,,281,190,3,3,http://host.docker.internal:3001/api/todos,6,0,1
+1780569552331,3,GET Frontend /,200,OK,Users 1-2,text,true,,582,157,3,3,http://host.docker.internal:8080/,3,0,2
+1780569552335,65,POST /api/auth/login,200,OK,Users 1-2,text,true,,425,244,3,3,http://host.docker.internal:3003/api/auth/login,65,0,2
+1780569552400,8,GET /api/todos,200,OK,Users 1-2,text,true,,312,363,3,3,http://host.docker.internal:3001/api/todos,8,0,2
+1780569552408,3,GET Frontend /,200,OK,Users 1-2,text,true,,582,157,3,3,http://host.docker.internal:8080/,3,0,2
+1780569552412,66,POST /api/auth/login,200,OK,Users 1-2,text,true,,425,244,3,3,http://host.docker.internal:3003/api/auth/login,66,0,1
+1780569552478,7,GET /api/todos,200,OK,Users 1-2,text,true,,312,363,3,3,http://host.docker.internal:3001/api/todos,7,0,2
+1780569552486,3,GET Frontend /,200,OK,Users 1-2,text,true,,582,157,3,3,http://host.docker.internal:8080/,3,0,2
+1780569552490,65,POST /api/auth/login,200,OK,Users 1-2,text,true,,425,244,3,3,http://host.docker.internal:3003/api/auth/login,65,0,1
+1780569552556,8,GET /api/todos,200,OK,Users 1-2,text,true,,312,363,3,3,http://host.docker.internal:3001/api/todos,8,0,2
+1780569552595,5,GET Frontend /,200,OK,Users 1-4,text,true,,582,157,4,4,http://host.docker.internal:8080/,5,0,3
+1780569552600,66,POST /api/auth/login,200,OK,Users 1-4,text,true,,425,244,4,4,http://host.docker.internal:3003/api/auth/login,66,0,2
+1780569552667,8,GET /api/todos,200,OK,Users 1-4,text,true,,312,363,4,4,http://host.docker.internal:3001/api/todos,8,0,2
+1780569552679,3,GET Frontend /,200,OK,Users 1-4,text,true,,582,157,4,4,http://host.docker.internal:8080/,3,0,2
+1780569552683,4,POST /api/auth/login,400,Bad Request,Users 1-4,text,false,,274,240,4,4,http://host.docker.internal:3003/api/auth/login,4,0,1
+1780569552687,6,GET /api/todos,401,Unauthorized,Users 1-4,text,false,,281,190,4,4,http://host.docker.internal:3001/api/todos,6,0,2
+1780569552693,4,GET Frontend /,200,OK,Users 1-4,text,true,,582,157,4,4,http://host.docker.internal:8080/,4,0,2
+1780569552697,65,POST /api/auth/login,200,OK,Users 1-4,text,true,,425,244,4,4,http://host.docker.internal:3003/api/auth/login,65,0,2
+1780569552763,7,GET /api/todos,200,OK,Users 1-4,text,true,,312,363,4,4,http://host.docker.internal:3001/api/todos,7,0,1
+1780569552770,4,GET Frontend /,200,OK,Users 1-4,text,true,,582,157,4,4,http://host.docker.internal:8080/,4,0,2
+1780569552774,67,POST /api/auth/login,200,OK,Users 1-4,text,true,,425,244,4,4,http://host.docker.internal:3003/api/auth/login,66,0,2
+1780569552841,14,GET /api/todos,200,OK,Users 1-4,text,true,,312,363,4,4,http://host.docker.internal:3001/api/todos,14,0,3
+1780569552855,5,GET Frontend /,200,OK,Users 1-4,text,true,,582,157,4,4,http://host.docker.internal:8080/,5,0,3
+1780569552861,73,POST /api/auth/login,200,OK,Users 1-4,text,true,,425,244,4,4,http://host.docker.internal:3003/api/auth/login,73,0,2
+1780569552934,8,GET /api/todos,200,OK,Users 1-4,text,true,,312,363,4,4,http://host.docker.internal:3001/api/todos,8,0,2
+1780569552942,3,GET Frontend /,200,OK,Users 1-4,text,true,,582,157,4,4,http://host.docker.internal:8080/,3,0,2
+1780569552946,64,POST /api/auth/login,200,OK,Users 1-4,text,true,,425,244,4,4,http://host.docker.internal:3003/api/auth/login,64,0,1
+1780569553010,8,GET /api/todos,200,OK,Users 1-4,text,true,,312,363,4,4,http://host.docker.internal:3001/api/todos,7,0,2
+1780569553018,3,GET Frontend /,200,OK,Users 1-4,text,true,,582,157,4,4,http://host.docker.internal:8080/,3,0,2
+1780569553022,65,POST /api/auth/login,200,OK,Users 1-4,text,true,,425,244,4,4,http://host.docker.internal:3003/api/auth/login,65,0,2
+1780569553087,8,GET /api/todos,200,OK,Users 1-4,text,true,,312,363,4,4,http://host.docker.internal:3001/api/todos,8,0,2
+1780569553099,4,GET Frontend /,200,OK,Users 1-4,text,true,,582,157,4,4,http://host.docker.internal:8080/,4,0,3
+1780569553103,4,POST /api/auth/login,400,Bad Request,Users 1-4,text,false,,274,240,4,4,http://host.docker.internal:3003/api/auth/login,4,0,2
+1780569553108,6,GET /api/todos,401,Unauthorized,Users 1-4,text,false,,281,190,4,4,http://host.docker.internal:3001/api/todos,6,0,2
+1780569553114,3,GET Frontend /,200,OK,Users 1-4,text,true,,582,157,4,4,http://host.docker.internal:8080/,3,0,1
+1780569553117,64,POST /api/auth/login,200,OK,Users 1-4,text,true,,425,244,4,4,http://host.docker.internal:3003/api/auth/login,64,0,1
+1780569553182,8,GET /api/todos,200,OK,Users 1-4,text,true,,312,363,4,4,http://host.docker.internal:3001/api/todos,8,0,1
+1780569553190,4,GET Frontend /,200,OK,Users 1-4,text,true,,582,157,4,4,http://host.docker.internal:8080/,3,0,2
+1780569553194,64,POST /api/auth/login,200,OK,Users 1-4,text,true,,425,244,4,4,http://host.docker.internal:3003/api/auth/login,64,0,1
+1780569553259,7,GET /api/todos,200,OK,Users 1-4,text,true,,312,363,4,4,http://host.docker.internal:3001/api/todos,7,0,2
+1780569553267,2,GET Frontend /,200,OK,Users 1-4,text,true,,582,157,4,4,http://host.docker.internal:8080/,2,0,1
+1780569553269,64,POST /api/auth/login,200,OK,Users 1-4,text,true,,425,244,4,4,http://host.docker.internal:3003/api/auth/login,64,0,1
+1780569553333,8,GET /api/todos,200,OK,Users 1-4,text,true,,312,363,4,4,http://host.docker.internal:3001/api/todos,8,0,2
+1780569553341,3,GET Frontend /,200,OK,Users 1-4,text,true,,582,157,4,4,http://host.docker.internal:8080/,3,0,2
+1780569553344,65,POST /api/auth/login,200,OK,Users 1-4,text,true,,425,244,4,4,http://host.docker.internal:3003/api/auth/login,65,0,1
+1780569553409,8,GET /api/todos,200,OK,Users 1-4,text,true,,312,363,4,4,http://host.docker.internal:3001/api/todos,8,0,3
+1780569553418,3,GET Frontend /,200,OK,Users 1-4,text,true,,582,157,4,4,http://host.docker.internal:8080/,3,0,2
+1780569553421,64,POST /api/auth/login,200,OK,Users 1-4,text,true,,425,244,4,4,http://host.docker.internal:3003/api/auth/login,64,0,1
+1780569553485,9,GET /api/todos,200,OK,Users 1-4,text,true,,312,363,4,4,http://host.docker.internal:3001/api/todos,9,0,3
+1780569553595,5,GET Frontend /,200,OK,Users 1-5,text,true,,582,157,5,5,http://host.docker.internal:8080/,5,0,2
+1780569553600,65,POST /api/auth/login,200,OK,Users 1-5,text,true,,425,244,5,5,http://host.docker.internal:3003/api/auth/login,65,0,2
+1780569553667,7,GET /api/todos,200,OK,Users 1-5,text,true,,312,363,5,5,http://host.docker.internal:3001/api/todos,7,0,2
+1780569553674,3,GET Frontend /,200,OK,Users 1-5,text,true,,582,157,5,5,http://host.docker.internal:8080/,3,0,2
+1780569553678,65,POST /api/auth/login,200,OK,Users 1-5,text,true,,425,244,5,5,http://host.docker.internal:3003/api/auth/login,65,0,1
+1780569553744,8,GET /api/todos,200,OK,Users 1-5,text,true,,312,363,5,5,http://host.docker.internal:3001/api/todos,8,0,2
+1780569553752,3,GET Frontend /,200,OK,Users 1-5,text,true,,582,157,5,5,http://host.docker.internal:8080/,3,0,2
+1780569553755,65,POST /api/auth/login,200,OK,Users 1-5,text,true,,425,244,5,5,http://host.docker.internal:3003/api/auth/login,65,0,2
+1780569553821,7,GET /api/todos,200,OK,Users 1-5,text,true,,312,363,5,5,http://host.docker.internal:3001/api/todos,7,0,1
+1780569553828,2,GET Frontend /,200,OK,Users 1-5,text,true,,582,157,5,5,http://host.docker.internal:8080/,2,0,1
+1780569553831,64,POST /api/auth/login,200,OK,Users 1-5,text,true,,425,244,5,5,http://host.docker.internal:3003/api/auth/login,64,0,1
+1780569553896,6,GET /api/todos,200,OK,Users 1-5,text,true,,312,363,5,5,http://host.docker.internal:3001/api/todos,6,0,1
+1780569553903,3,GET Frontend /,200,OK,Users 1-5,text,true,,582,157,5,5,http://host.docker.internal:8080/,3,0,1
+1780569553906,63,POST /api/auth/login,200,OK,Users 1-5,text,true,,425,244,5,5,http://host.docker.internal:3003/api/auth/login,63,0,1
+1780569553969,8,GET /api/todos,200,OK,Users 1-5,text,true,,312,363,5,5,http://host.docker.internal:3001/api/todos,8,0,2
+1780569553981,4,GET Frontend /,200,OK,Users 1-5,text,true,,582,157,5,5,http://host.docker.internal:8080/,4,0,2
+1780569553985,4,POST /api/auth/login,400,Bad Request,Users 1-5,text,false,,274,240,5,5,http://host.docker.internal:3003/api/auth/login,4,0,2
+1780569553990,6,GET /api/todos,401,Unauthorized,Users 1-5,text,false,,281,190,5,5,http://host.docker.internal:3001/api/todos,5,0,1
+1780569553996,2,GET Frontend /,200,OK,Users 1-5,text,true,,582,157,5,5,http://host.docker.internal:8080/,2,0,1
+1780569553998,64,POST /api/auth/login,200,OK,Users 1-5,text,true,,425,244,5,5,http://host.docker.internal:3003/api/auth/login,64,0,2
+1780569554062,8,GET /api/todos,200,OK,Users 1-5,text,true,,312,363,5,5,http://host.docker.internal:3001/api/todos,8,0,2
+1780569554070,3,GET Frontend /,200,OK,Users 1-5,text,true,,582,157,5,5,http://host.docker.internal:8080/,3,0,2
+1780569554073,62,POST /api/auth/login,200,OK,Users 1-5,text,true,,425,244,5,5,http://host.docker.internal:3003/api/auth/login,62,0,1
+1780569554136,8,GET /api/todos,200,OK,Users 1-5,text,true,,312,363,5,5,http://host.docker.internal:3001/api/todos,8,0,2
+1780569554144,4,GET Frontend /,200,OK,Users 1-5,text,true,,582,157,5,5,http://host.docker.internal:8080/,4,0,2
+1780569554148,64,POST /api/auth/login,200,OK,Users 1-5,text,true,,425,244,5,5,http://host.docker.internal:3003/api/auth/login,64,0,1
+1780569554213,7,GET /api/todos,200,OK,Users 1-5,text,true,,312,363,5,5,http://host.docker.internal:3001/api/todos,6,0,1
+1780569554220,3,GET Frontend /,200,OK,Users 1-5,text,true,,582,157,5,5,http://host.docker.internal:8080/,3,0,1
+1780569554223,63,POST /api/auth/login,200,OK,Users 1-5,text,true,,425,244,5,5,http://host.docker.internal:3003/api/auth/login,63,0,1
+1780569554287,7,GET /api/todos,200,OK,Users 1-5,text,true,,312,363,5,5,http://host.docker.internal:3001/api/todos,7,0,2
+1780569554294,4,GET Frontend /,200,OK,Users 1-5,text,true,,582,157,5,5,http://host.docker.internal:8080/,4,0,2
+1780569554298,64,POST /api/auth/login,200,OK,Users 1-5,text,true,,425,244,5,5,http://host.docker.internal:3003/api/auth/login,64,0,2
+1780569554363,7,GET /api/todos,200,OK,Users 1-5,text,true,,312,363,5,5,http://host.docker.internal:3001/api/todos,6,0,1
+1780569554374,3,GET Frontend /,200,OK,Users 1-5,text,true,,582,157,5,5,http://host.docker.internal:8080/,3,0,1
+1780569554378,4,POST /api/auth/login,400,Bad Request,Users 1-5,text,false,,274,240,5,5,http://host.docker.internal:3003/api/auth/login,4,0,1
+1780569554382,6,GET /api/todos,401,Unauthorized,Users 1-5,text,false,,281,190,5,5,http://host.docker.internal:3001/api/todos,6,0,2
+1780569554388,4,GET Frontend /,200,OK,Users 1-5,text,true,,582,157,5,5,http://host.docker.internal:8080/,4,0,2
+1780569554392,65,POST /api/auth/login,200,OK,Users 1-5,text,true,,425,244,5,5,http://host.docker.internal:3003/api/auth/login,65,0,2
+1780569554458,7,GET /api/todos,200,OK,Users 1-5,text,true,,312,363,5,5,http://host.docker.internal:3001/api/todos,7,0,1
+1780569554594,5,GET Frontend /,200,OK,Users 1-6,text,true,,582,157,6,6,http://host.docker.internal:8080/,5,0,2
+1780569554599,63,POST /api/auth/login,200,OK,Users 1-6,text,true,,425,244,6,6,http://host.docker.internal:3003/api/auth/login,63,0,2
+1780569554662,8,GET /api/todos,200,OK,Users 1-6,text,true,,312,363,6,6,http://host.docker.internal:3001/api/todos,8,0,2
+1780569555592,4,GET Frontend /,200,OK,Users 1-7,text,true,,582,157,7,7,http://host.docker.internal:8080/,4,0,2
+1780569555596,64,POST /api/auth/login,200,OK,Users 1-7,text,true,,425,244,7,7,http://host.docker.internal:3003/api/auth/login,64,0,2
+1780569555661,8,GET /api/todos,200,OK,Users 1-7,text,true,,312,363,7,7,http://host.docker.internal:3001/api/todos,8,0,2
+1780569555674,3,GET Frontend /,200,OK,Users 1-7,text,true,,582,157,7,7,http://host.docker.internal:8080/,3,0,2
+1780569555677,5,POST /api/auth/login,400,Bad Request,Users 1-7,text,false,,274,240,7,7,http://host.docker.internal:3003/api/auth/login,4,0,2
+1780569555682,7,GET /api/todos,401,Unauthorized,Users 1-7,text,false,,281,190,7,7,http://host.docker.internal:3001/api/todos,6,0,2
+1780569555689,2,GET Frontend /,200,OK,Users 1-7,text,true,,582,157,7,7,http://host.docker.internal:8080/,2,0,1
+1780569555692,65,POST /api/auth/login,200,OK,Users 1-7,text,true,,425,244,7,7,http://host.docker.internal:3003/api/auth/login,65,0,1
+1780569555758,7,GET /api/todos,200,OK,Users 1-7,text,true,,312,363,7,7,http://host.docker.internal:3001/api/todos,7,0,1
+1780569555765,3,GET Frontend /,200,OK,Users 1-7,text,true,,582,157,7,7,http://host.docker.internal:8080/,3,0,2
+1780569555768,68,POST /api/auth/login,200,OK,Users 1-7,text,true,,425,244,7,7,http://host.docker.internal:3003/api/auth/login,68,0,1
+1780569555837,7,GET /api/todos,200,OK,Users 1-7,text,true,,312,363,7,7,http://host.docker.internal:3001/api/todos,7,0,1
+1780569555845,3,GET Frontend /,200,OK,Users 1-7,text,true,,582,157,7,7,http://host.docker.internal:8080/,3,0,2
+1780569555848,65,POST /api/auth/login,200,OK,Users 1-7,text,true,,425,244,7,7,http://host.docker.internal:3003/api/auth/login,64,0,2
+1780569555913,7,GET /api/todos,200,OK,Users 1-7,text,true,,312,363,7,7,http://host.docker.internal:3001/api/todos,7,0,1
+1780569555921,3,GET Frontend /,200,OK,Users 1-7,text,true,,582,157,7,7,http://host.docker.internal:8080/,3,0,1
+1780569555924,65,POST /api/auth/login,200,OK,Users 1-7,text,true,,425,244,7,7,http://host.docker.internal:3003/api/auth/login,65,0,2
+1780569555989,8,GET /api/todos,200,OK,Users 1-7,text,true,,312,363,7,7,http://host.docker.internal:3001/api/todos,8,0,2
+1780569555997,3,GET Frontend /,200,OK,Users 1-7,text,true,,582,157,7,7,http://host.docker.internal:8080/,3,0,2
+1780569556000,65,POST /api/auth/login,200,OK,Users 1-7,text,true,,425,244,7,7,http://host.docker.internal:3003/api/auth/login,64,0,1
+1780569556065,8,GET /api/todos,200,OK,Users 1-7,text,true,,312,363,7,7,http://host.docker.internal:3001/api/todos,8,0,2
+1780569556078,4,GET Frontend /,200,OK,Users 1-7,text,true,,582,157,7,7,http://host.docker.internal:8080/,4,0,2
+1780569556082,4,POST /api/auth/login,400,Bad Request,Users 1-7,text,false,,274,240,7,7,http://host.docker.internal:3003/api/auth/login,4,0,2
+1780569556086,7,GET /api/todos,401,Unauthorized,Users 1-7,text,false,,281,190,7,7,http://host.docker.internal:3001/api/todos,6,0,2
+1780569556093,2,GET Frontend /,200,OK,Users 1-7,text,true,,582,157,7,7,http://host.docker.internal:8080/,2,0,1
+1780569556095,64,POST /api/auth/login,200,OK,Users 1-7,text,true,,425,244,7,7,http://host.docker.internal:3003/api/auth/login,64,0,2
+1780569556159,8,GET /api/todos,200,OK,Users 1-7,text,true,,312,363,7,7,http://host.docker.internal:3001/api/todos,8,0,2
+1780569556167,3,GET Frontend /,200,OK,Users 1-7,text,true,,582,157,7,7,http://host.docker.internal:8080/,3,0,2
+1780569556170,65,POST /api/auth/login,200,OK,Users 1-7,text,true,,425,244,7,7,http://host.docker.internal:3003/api/auth/login,65,0,2
+1780569556235,7,GET /api/todos,200,OK,Users 1-7,text,true,,312,363,7,7,http://host.docker.internal:3001/api/todos,7,0,2
+1780569556243,2,GET Frontend /,200,OK,Users 1-7,text,true,,582,157,7,7,http://host.docker.internal:8080/,2,0,1
+1780569556246,64,POST /api/auth/login,200,OK,Users 1-7,text,true,,425,244,7,7,http://host.docker.internal:3003/api/auth/login,64,0,1
+1780569556591,4,GET Frontend /,200,OK,Users 1-8,text,true,,582,157,8,8,http://host.docker.internal:8080/,4,0,3
+1780569556596,63,POST /api/auth/login,200,OK,Users 1-8,text,true,,425,244,8,8,http://host.docker.internal:3003/api/auth/login,63,0,2
+1780569556660,11,GET /api/todos,200,OK,Users 1-8,text,true,,312,363,8,8,http://host.docker.internal:3001/api/todos,11,0,3
+1780569556671,4,GET Frontend /,200,OK,Users 1-8,text,true,,582,157,8,8,http://host.docker.internal:8080/,4,0,2
+1780569556675,64,POST /api/auth/login,200,OK,Users 1-8,text,true,,425,244,8,8,http://host.docker.internal:3003/api/auth/login,64,0,2
+1780569556740,7,GET /api/todos,200,OK,Users 1-8,text,true,,312,363,8,8,http://host.docker.internal:3001/api/todos,7,0,2
+1780569556752,4,GET Frontend /,200,OK,Users 1-8,text,true,,582,157,8,8,http://host.docker.internal:8080/,4,0,2
+1780569556756,4,POST /api/auth/login,400,Bad Request,Users 1-8,text,false,,274,240,8,8,http://host.docker.internal:3003/api/auth/login,4,0,2
+1780569556760,6,GET /api/todos,401,Unauthorized,Users 1-8,text,false,,281,190,8,8,http://host.docker.internal:3001/api/todos,6,0,2
+1780569556767,2,GET Frontend /,200,OK,Users 1-8,text,true,,582,157,8,8,http://host.docker.internal:8080/,2,0,1
+1780569556769,64,POST /api/auth/login,200,OK,Users 1-8,text,true,,425,244,8,8,http://host.docker.internal:3003/api/auth/login,64,0,2
+1780569556834,7,GET /api/todos,200,OK,Users 1-8,text,true,,312,363,8,8,http://host.docker.internal:3001/api/todos,7,0,2
+1780569556842,2,GET Frontend /,200,OK,Users 1-8,text,true,,582,157,8,8,http://host.docker.internal:8080/,2,0,1
+1780569556844,64,POST /api/auth/login,200,OK,Users 1-8,text,true,,425,244,8,8,http://host.docker.internal:3003/api/auth/login,64,0,2
+1780569557591,5,GET Frontend /,200,OK,Users 1-9,text,true,,582,157,9,9,http://host.docker.internal:8080/,5,0,3
+1780569557597,63,POST /api/auth/login,200,OK,Users 1-9,text,true,,425,244,9,9,http://host.docker.internal:3003/api/auth/login,63,0,2
+1780569557661,8,GET /api/todos,200,OK,Users 1-9,text,true,,312,363,9,9,http://host.docker.internal:3001/api/todos,7,0,2
+1780569557669,3,GET Frontend /,200,OK,Users 1-9,text,true,,582,157,9,9,http://host.docker.internal:8080/,2,0,1
+1780569557672,64,POST /api/auth/login,200,OK,Users 1-9,text,true,,425,244,9,9,http://host.docker.internal:3003/api/auth/login,64,0,1
+1780569557736,8,GET /api/todos,200,OK,Users 1-9,text,true,,312,363,9,9,http://host.docker.internal:3001/api/todos,8,0,2
+1780569557744,3,GET Frontend /,200,OK,Users 1-9,text,true,,582,157,9,9,http://host.docker.internal:8080/,3,0,2
+1780569557747,65,POST /api/auth/login,200,OK,Users 1-9,text,true,,425,244,9,9,http://host.docker.internal:3003/api/auth/login,65,0,2
+1780569557812,7,GET /api/todos,200,OK,Users 1-9,text,true,,312,363,9,9,http://host.docker.internal:3001/api/todos,7,0,2
+1780569557824,3,GET Frontend /,200,OK,Users 1-9,text,true,,582,157,9,9,http://host.docker.internal:8080/,3,0,1
+1780569557827,4,POST /api/auth/login,400,Bad Request,Users 1-9,text,false,,274,240,9,9,http://host.docker.internal:3003/api/auth/login,4,0,2
+1780569557832,5,GET /api/todos,401,Unauthorized,Users 1-9,text,false,,281,190,9,9,http://host.docker.internal:3001/api/todos,5,0,1
+1780569557837,3,GET Frontend /,200,OK,Users 1-9,text,true,,582,157,9,9,http://host.docker.internal:8080/,3,0,2
+1780569557840,65,POST /api/auth/login,200,OK,Users 1-9,text,true,,425,244,9,9,http://host.docker.internal:3003/api/auth/login,65,0,2
+1780569558590,5,GET Frontend /,200,OK,Users 1-10,text,true,,582,157,10,10,http://host.docker.internal:8080/,5,0,3
+1780569558596,62,POST /api/auth/login,200,OK,Users 1-10,text,true,,425,244,10,10,http://host.docker.internal:3003/api/auth/login,62,0,2
+1780569558659,9,GET /api/todos,200,OK,Users 1-10,text,true,,312,363,10,10,http://host.docker.internal:3001/api/todos,9,0,3
+1780569558668,3,GET Frontend /,200,OK,Users 1-10,text,true,,582,157,10,10,http://host.docker.internal:8080/,3,0,1
+1780569558671,69,POST /api/auth/login,200,OK,Users 1-10,text,true,,425,244,10,10,http://host.docker.internal:3003/api/auth/login,69,0,1
+1780569556909,19568,GET /api/todos,200,OK,Users 1-8,text,true,,312,363,10,10,http://host.docker.internal:3001/api/todos,19568,0,19554
+1780569557906,19588,GET /api/todos,200,OK,Users 1-9,text,true,,312,363,9,9,http://host.docker.internal:3001/api/todos,19587,0,19582
+1780569558741,19520,GET /api/todos,200,OK,Users 1-10,text,true,,312,363,8,8,http://host.docker.internal:3001/api/todos,19520,0,19514
+1780569550367,35573,GET Frontend /,200,OK,Users 1-1,text,true,,582,157,7,7,http://host.docker.internal:8080/,35573,0,35570
+1780569551856,35619,GET Frontend /,200,OK,Users 1-3,text,true,,582,157,6,6,http://host.docker.internal:8080/,35619,0,35616
+1780569552564,35678,GET Frontend /,200,OK,Users 1-2,text,true,,582,157,5,5,http://host.docker.internal:8080/,35678,0,35676
+1780569553497,35513,GET Frontend /,200,OK,Users 1-4,text,true,,582,157,4,4,http://host.docker.internal:8080/,35513,0,35511
+1780569554465,35569,GET Frontend /,200,OK,Users 1-5,text,true,,582,157,3,3,http://host.docker.internal:8080/,35569,0,35567
+1780569554670,35619,GET Frontend /,200,OK,Users 1-6,text,true,,582,157,2,2,http://host.docker.internal:8080/,35619,0,35617
+1780569556310,35530,GET /api/todos,200,OK,Users 1-7,text,true,,312,363,1,1,http://host.docker.internal:3001/api/todos,35530,0,35513

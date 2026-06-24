@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-auth
+  namespace: todo-research
+spec:
+  selector:
+    app: postgres-auth
+  ports:
+    - port: 5432
+      targetPort: 5432
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-auth
+  namespace: todo-research
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-auth
+  template:
+    metadata:
+      labels:
+        app: postgres-auth
+    spec:
+      containers:
+        - name: postgres-auth
+          image: postgres:15-alpine
+          env:
+            - name: POSTGRES_USER
+              value: "todouser"
+            - name: POSTGRES_PASSWORD
+              value: "todopass"
+            - name: POSTGRES_DB
+              value: "authdb"
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: postgres-auth-storage
+              mountPath: /var/lib/postgresql/data
+            - name: init-script
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: postgres-auth-storage
+          persistentVolumeClaim:
+            claimName: postgres-auth-pvc
+        - name: init-script
+          configMap:
+            name: auth-init-sql

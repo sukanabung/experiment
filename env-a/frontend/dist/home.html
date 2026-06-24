@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Todos - To-Do List App</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📝 My Todos</h1>
+            <div class="user-info">
+                <span id="username-display">User</span>
+                <button id="logout-btn" class="btn btn-danger">Logout</button>
+            </div>
+        </div>
+
+        <div id="message" class="message"></div>
+
+        <!-- Add Todo Form -->
+        <div class="todo-form">
+            <input type="text" id="todo-title" placeholder="What do you want to do?">
+            <button id="add-btn" class="btn btn-primary">Add Todo</button>
+        </div>
+
+        <!-- Todo List -->
+        <ul id="todo-list" class="todo-list">
+            <li class="empty-state">Loading todos...</li>
+        </ul>
+    </div>
+
+    <script src="/assets/js/api.js"></script>
+    <script src="/assets/js/auth.js"></script>
+    <script src="/assets/js/todos.js"></script>
+    <script>
+        // Cek autentikasi
+        const token = getToken();
+        if (!token) {
+            window.location.href = '/login.html';
+        }
+
+        // Tampilkan username
+        const user = getUser();
+        if (user) {
+            document.getElementById('username-display').textContent = '👋 ' + user.username;
+        }
+
+        // Load todos
+        loadTodos();
+
+        // Add todo
+        document.getElementById('add-btn').addEventListener('click', async () => {
+            const title = document.getElementById('todo-title').value.trim();
+            if (!title) {
+                showMessage('Please enter a todo title', 'error');
+                return;
+            }
+            const result = await addTodo(title);
+            if (result.success) {
+                document.getElementById('todo-title').value = '';
+                showMessage('Todo added!', 'success');
+                loadTodos();
+            } else {
+                showMessage(result.message, 'error');
+            }
+        });
+
+        // Logout
+        document.getElementById('logout-btn').addEventListener('click', async () => {
+            await logout();
+            window.location.href = '/login.html';
+        });
+
+        function showMessage(msg, type) {
+            const el = document.getElementById('message');
+            el.textContent = msg;
+            el.className = 'message ' + type;
+            setTimeout(() => { el.textContent = ''; el.className = 'message'; }, 5000);
+        }
+    </script>
+</body>
+</html>

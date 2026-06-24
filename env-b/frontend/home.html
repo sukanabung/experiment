@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Todo List Teavou</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app-view">
+        <h1 class="main-title">📝 Todo List Teavou</h1>
+        <p class="user-greeting">Halo, <span id="display-username" class="user-name-highlight">User</span>! 👋 Selamat beraktivitas.</p>
+
+        <button onclick="logout()" class="logout-btn-fixed">🚪 Keluar</button>
+
+        <div class="card-box">
+            <h2>Tambah Tugas Baru</h2>
+
+            <input type="text" id="todo-title" placeholder="Judul Tugas...">
+            <textarea id="todo-desc" placeholder="Catatan tambahan..."></textarea>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <label>📅 Batas Waktu:</label>
+                    <input type="date" id="todo-date">
+                </div>
+                <div class="input-group">
+                    <label>🎨 Warna:</label>
+                    <input type="color" id="todo-color" value="#cddc39">
+                </div>
+            </div>
+
+            <button onclick="addTodo()" class="btn-primary">+ Simpan Tugas</button>
+        </div>
+
+        <div class="list-section">
+            <div class="section-header">⏳ Tugas Aktif</div>
+            <div id="active-list"></div>
+
+            <div class="section-header" style="margin-top: 30px;">✅ Riwayat Selesai</div>
+            <div id="completed-list"></div>
+        </div>
+    </div>
+
+    <script>
+        // API endpoints - works both in Docker and localhost
+        const getAPIHost = () => {
+            const host = window.location.hostname;
+            if (host === 'localhost' || host === '127.0.0.1') {
+                return { todo: 'http://localhost:3001', auth: 'http://localhost:3003' };
+            }
+            return { todo: `http://${host}:3001`, auth: `http://${host}:3003` };
+        };
+        
+        const APIs = getAPIHost();
+        let token = localStorage.getItem('token');
+
+        if (!token) {
+            window.location.href = 'login.html';
+        } else {
+            const storedUser = localStorage.getItem('username');
+            if (storedUser) {
+                document.getElementById('display-username').innerText = storedUser;
+            }
+            fetchTodos();
+            
+            // Real-time: Setiap 60 detik, cek apakah deadline sudah terlewat
+            setInterval(fetchTodos, 60000);
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+
+        function formatDateToIndonesian(dateString) {
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            const date = new Date(dateString);
+            const day = date.getDate();
+            const month = months[date.getMonth()];
+            const year = date.getFullYear();
+            return `${day} ${month} ${year}`;
+        }
+
+        async function fetchTodos() {
+            try {
+                const res = await fetch(APIs.todo + '/todos', {
+                    headers: { 'x-auth-token': token }
+                });
+                if (res.status === 401) { logout(); return; }
+                const data = await res.json();
+                const todos = Array.isArray(data) ? data : (data.todos || []);
+                renderLists(todos);
+            } catch (err) { console.error(err); }
+        }
+
+        function renderLists(todos) {
+            const activeList = document.getElementById('active-list');
+            const completedList = document.getElementById('completed-list');
+            activeList.innerHTML = ''; completedList.innerHTML = '';
+
+            if (todos.length === 0) activeList.innerHTML = '<p style="text-align:center; color:#999;">Belum ada tugas.</p>';
+
+            todos.forEach(todo => {
+                const div = document.createElement('div');
+                let borderColor = todo.isCompleted ? '#28a745' : (todo.cardColor || '#cddc39');
+                const dateDisplay = todo.deadline ? todo.deadline.split('T')[0] : '';
+                const completedDate = todo.timestamps && todo.timestamps.completedOn ? new Date(todo.timestamps.completedOn).toISOString().split('T')[0] : '';
+                
+                const dateDisplayIndonesian = dateDisplay ? formatDateToIndonesian(dateDisplay) : '';
+                const completedDateIndonesian = completedDate ? formatDateToIndonesian(completedDate) : '';
+                
+                let isLate = false;
+                if (todo.isCompleted && todo.deadline && todo.timestamps && todo.timestamps.completedOn) {
+                    const deadline = new Date(todo.deadline);
+                    const completed = new Date(todo.timestamps.completedOn);
+                    deadline.setHours(0, 0, 0, 0);
+                    completed.setHours(0, 0, 0, 0);
+                    if (completed > deadline) {
+                        isLate = true;
+                    }
+                }
+                
+                let isOverdue = false;
+                let daysLeft = '';
+                if (todo.deadline && !todo.isCompleted) {
+                    const deadline = new Date(todo.deadline);
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    deadline.setHours(0, 0, 0, 0);
+                    
+                    if (deadline < today) {
+                        isOverdue = true;
+                        daysLeft = '⚠️ SUDAH LEWAT';
+                    } else {
+                        const diffTime = deadline - today;
+                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                        if (diffDays === 0) {
+                            daysLeft = '🔴 HARI INI';
+                        } else if (diffDays === 1) {
+                            daysLeft = '🟠 BESOK';
+                        } else if (diffDays <= 3) {
+                            daysLeft = `⏰ ${diffDays} hari lagi`;
+                        } else {
+                            daysLeft = `📅 ${diffDays} hari lagi`;
+                        }
+                    }
+                }
+
+                div.className = 'todo-item';
+                div.style.borderLeftColor = borderColor;
+                if (todo.isCompleted) {
+                    div.style.opacity = '0.7';
+                    div.style.backgroundColor = '#f9f9f9';
+                }
+                
+                if (isOverdue) {
+                    div.style.backgroundColor = '#fff3cd';
+                    div.style.borderLeftColor = '#ff4444';
+                    div.style.borderLeftWidth = '4px';
+                }
+                
+                if (isLate) {
+                    div.style.backgroundColor = '#ffe0e0';
+                    div.style.borderLeftColor = '#ff6666';
+                    div.style.borderLeftWidth = '4px';
+                }
+
+                div.innerHTML = `
+                    <div class="todo-content" onclick="toggleStatus('${todo._id}')">
+                        <div class="todo-title" style="${todo.isCompleted ? 'text-decoration: line-through; color: #888;' : ''}">${todo.title}</div>
+                        <div class="todo-desc">${todo.description || '-'}</div>
+                        <div class="todo-meta">
+                            ${todo.isCompleted && dateDisplayIndonesian ? `<span class="date-badge" style="${isLate ? 'background-color: #ff6666; color: white;' : 'background-color: #28a745; color: white;'}">${isLate ? '⚠️ Tenggat: ' + dateDisplayIndonesian : '✔ Tenggat: ' + dateDisplayIndonesian}</span>` : ''}
+                            ${todo.isCompleted && completedDateIndonesian ? `<span class="date-badge" style="${isLate ? 'background-color: #ff6666; color: white;' : 'background-color: #1976d2; color: white;'}">${isLate ? '❌ Selesai: ' + completedDateIndonesian : '📝 Selesai: ' + completedDateIndonesian}</span>` : ''}
+                            ${!todo.isCompleted && dateDisplay ? `<span class="date-badge" style="${isOverdue ? 'background-color: #ff4444; color: white;' : ''}">${daysLeft ? daysLeft + ' (' + dateDisplay + ')' : '📅 ' + dateDisplay}</span>` : ''}
+                            <span class="status-text ${todo.isCompleted ? 'text-success' : 'text-warning'}">
+                                ${todo.isCompleted ? '✔ Selesai' : '○ Klik untuk selesaikan'}
+                            </span>
+                        </div>
+                    </div>
+                    <button class="btn-delete" onclick="deleteTodo('${todo._id}')">Hapus</button>
+                `;
+
+                if (todo.isCompleted) completedList.appendChild(div);
+                else activeList.appendChild(div);
+            });
+        }
+
+        async function addTodo() {
+            const title = document.getElementById('todo-title').value;
+            const descInput = document.getElementById('todo-desc').value;
+            const deadline = document.getElementById('todo-date').value;
+            const colorInput = document.getElementById('todo-color').value;
+
+            if (!title) return alert("Judul tugas wajib diisi!");
+
+            await fetch(APIs.todo + '/todos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'x-auth-token': token },
+                body: JSON.stringify({ title, description: descInput, deadline, cardColor: colorInput })
+            });
+
+            document.getElementById('todo-title').value = '';
+            document.getElementById('todo-desc').value = '';
+            document.getElementById('todo-date').value = '';
+            document.getElementById('todo-color').value = '#cddc39';
+            fetchTodos();
+        }
+
+        async function toggleStatus(id) {
+            if (!confirm('Apakah Anda yakin ingin mengubah status tugas ini?')) return;
+            await fetch(APIs.todo + '/todos/' + id, {
+                method: 'PATCH',
+                headers: { 'x-auth-token': token }
+            });
+            fetchTodos();
+        }
+
+        async function deleteTodo(id) {
+            if (!confirm('Hapus tugas ini?')) return;
+            await fetch(APIs.todo + '/todos/' + id, {
+                method: 'DELETE',
+                headers: { 'x-auth-token': token }
+            });
+            fetchTodos();
+        }
+    </script>
+</body>
+</html>

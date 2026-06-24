@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Todo List Teavou</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="auth-view">
+        <h1 class="main-title">📝 Todo List Teavou</h1>
+
+        <div class="card-box">
+            <h2 id="auth-title">Login Aplikasi</h2>
+            <p id="auth-error" class="error-msg"></p>
+
+            <input type="email" id="email" placeholder="Email Address" autocomplete="off">
+            <input type="password" id="password" placeholder="Password" autocomplete="off">
+
+            <button onclick="handleLogin()" class="btn-primary" id="auth-btn">Masuk</button>
+            <button onclick="goToRegister()" class="auth-link" id="toggle-link">Belum punya akun? Daftar</button>
+        </div>
+    </div>
+
+    <script>
+        // API endpoint - works both in Docker (hostname) and localhost
+        const AUTH_API = window.location.hostname === 'localhost' 
+            ? 'http://localhost:3003/auth'
+            : `http://${window.location.hostname}:3003/auth`;
+
+        async function handleLogin() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const res = await fetch(AUTH_API + '/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.message);
+
+                localStorage.setItem('token', data.token);
+                if (data.user && data.user.username) {
+                    localStorage.setItem('username', data.user.username);
+                }
+                window.location.href = 'home.html';
+            } catch (err) {
+                document.getElementById('auth-error').innerText = err.message;
+            }
+        }
+
+        function goToRegister() {
+            window.location.href = 'register.html';
+        }
+    </script>
+</body>
+</html>
