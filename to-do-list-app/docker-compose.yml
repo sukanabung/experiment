@@ -1,0 +1,151 @@
+version: '3.8'
+
+networks:
+  todo-network:
+    driver: bridge
+    name: todo-network
+
+services:
+  # ==============================
+  # DATABASE & CACHE SERVICES (Linux Alpine)
+  # ==============================
+
+  postgres-auth:
+    image: postgres:15-alpine
+    container_name: postgres-auth
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${AUTH_DB_USER:-todouser}
+      POSTGRES_PASSWORD: ${AUTH_DB_PASSWORD:-todopass}
+      POSTGRES_DB: ${AUTH_DB_NAME:-authdb}
+    volumes:
+      - D:\experiment\env-a\postgres_auth_data:/var/lib/postgresql/data
+      - D:\experiment\env-a\init-auth.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - todo-network
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  postgres-todo:
+    image: postgres:15-alpine
+    container_name: postgres-todo
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${TODO_DB_USER:-todouser}
+      POSTGRES_PASSWORD: ${TODO_DB_PASSWORD:-todopass}
+      POSTGRES_DB: ${TODO_DB_NAME:-tododb}
+    volumes:
+      - D:\experiment\env-a\postgres_todo_data:/var/lib/postgresql/data
+      - D:\experiment\env-a\init-todo.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5433:5432"
+    networks:
+      - todo-network
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  redis:
+    image: redis:7-alpine
+    container_name: todo-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - D:\experiment\env-a\redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - todo-network
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+
+  # ==============================
+  # APPLICATION SERVICES (Microservices)
+  # ==============================
+
+  auth-service:
+    build:
+      context: D:\experiment\env-a\auth-service
+      dockerfile: Dockerfile
+    container_name: auth-service
+    restart: unless-stopped
+    env_file:
+      - D:\experiment\env-a\.env
+    ports:
+      - "3001:3001"
+    networks:
+      - todo-network
+    depends_on:
+      postgres-auth:
+        condition: service_healthy
+
+  todo-service:
+    build:
+      context: D:\experiment\env-a\todo-service
+      dockerfile: Dockerfile
+    container_name: todo-service
+    restart: unless-stopped
+    env_file:
+      - D:\experiment\env-a\.env
+    ports:
+      - "3002:3002"
+    networks:
+      - todo-network
+    depends_on:
+      postgres-todo:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  notification-service:
+    build:
+      context: D:\experiment\env-a\notification-service
+      dockerfile: Dockerfile
+    container_name: notification-service
+    restart: unless-stopped
+    env_file:
+      - D:\experiment\env-a\.env
+    ports:
+      - "3003:3003"
+    networks:
+      - todo-network
+    depends_on:
+      redis:
+        condition: service_started
+
+  # ==============================
+  # FRONTEND SERVICE
+  # ==============================
+
+  frontend:
+    build:
+      context: D:\experiment\env-a\frontend
+      dockerfile: Dockerfile
+    container_name: todo-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    networks:
+      - todo-network
+    depends_on:
+      - auth-service
+      - todo-service
