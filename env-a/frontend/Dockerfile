@@ -3,7 +3,7 @@ FROM nginx:alpine
 RUN apk add --no-cache wget
 
 COPY nginx.conf /etc/nginx/nginx.conf
-COPY dist/ /usr/share/nginx/html
+COPY . /usr/share/nginx/html
 
 EXPOSE 80
 

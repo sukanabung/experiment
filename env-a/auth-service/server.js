@@ -9,6 +9,9 @@ const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 
 const app = express();
+// Allow Express to respect X-Forwarded-* headers set by reverse proxies (nginx)
+// Trust only the first proxy (numeric 1) to avoid permissive trust that express-rate-limit rejects.
+app.set('trust proxy', 1);
 const port = process.env.PORT || 3000;
 
 app.use(helmet());
@@ -104,14 +107,15 @@ app.post('/api/auth/register', async (req, res) => {
 
 app.post('/api/auth/login', async (req, res) => {
   try {
-    const { username, password } = req.body;
-    if (!username || !password) {
-      return res.status(400).json({ error: 'Username and password required' });
+    const { username, password, email } = req.body;
+    const identifier = username || email;
+    if (!identifier || !password) {
+      return res.status(400).json({ error: 'Username/email and password required' });
     }
 
     const result = await pool.query(
-      'SELECT id, username, email, password_hash FROM users WHERE username = $1',
-      [username]
+      'SELECT id, username, email, password_hash FROM users WHERE username = $1 OR email = $1',
+      [identifier]
     );
 
     if (result.rows.length === 0) {

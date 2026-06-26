@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS todos (
   title VARCHAR(255) NOT NULL,
   description TEXT,
   due_date DATE,
+  card_color TEXT DEFAULT '#cddc39',
   completed BOOLEAN DEFAULT FALSE,
   priority INTEGER DEFAULT 1,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

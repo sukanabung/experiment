@@ -1,41 +1,18 @@
-# Windows Container - Node.js
-FROM mcr.microsoft.com/windows/servercore:ltsc2022
+FROM node:18-alpine
 
-# Install Node.js (Windows)
-SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
+# Install build tools untuk bcrypt
+RUN apk add --no-cache python3 make g++
 
-# Download and install Node.js
-ADD https://nodejs.org/dist/v18.16.0/node-v18.16.0-x64.msi C:\node-install.msi
-RUN Start-Process msiexec -ArgumentList '/i C:\node-install.msi /quiet /norestart' -Wait; \
-    Remove-Item C:\node-install.msi -Force
-
-# Set environment variables
-ENV PATH="C:\Program Files\nodejs;${PATH}"
-ENV NODE_ENV=production
-
-# Create app directory
 WORKDIR /app
 
-# Copy package files
 COPY package*.json ./
+RUN npm install --only=production --no-audit --no-fund
 
-# Install dependencies
-RUN npm ci --only=production --no-audit --no-fund
-
-# Copy application
 COPY . .
 
-# Expose port
 EXPOSE 3000
 
-# Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=30s --retries=3 \
-    CMD powershell -Command "try { Invoke-WebRequest -Uri http://localhost:3000/health -UseBasicParsing | Out-Null; exit 0 } catch { exit 1 }"
+  CMD node -e "require('http').get('http://localhost:3000/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
 
-# Start application
 CMD ["node", "server.js"]
-
-LABEL maintainer="research@example.com" \
-    service="auth-service" \
-    version="1.0.0" \
-    os="windows"

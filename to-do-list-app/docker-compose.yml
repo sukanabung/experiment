@@ -1,28 +1,29 @@
-version: '3.8'
-
 networks:
   todo-network:
-    driver: bridge
     name: todo-network
 
-services:
-  # ==============================
-  # DATABASE & CACHE SERVICES (Linux Alpine)
-  # ==============================
+volumes:
+  postgres_auth_data:
+    name: postgres_auth_data
+  postgres_todo_data:
+    name: postgres_todo_data
+  redis_data:
+    name: redis_data
 
+services:
   postgres-auth:
-    image: postgres:15-alpine
+    image: postgres:15
     container_name: postgres-auth
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${AUTH_DB_USER:-todouser}
-      POSTGRES_PASSWORD: ${AUTH_DB_PASSWORD:-todopass}
-      POSTGRES_DB: ${AUTH_DB_NAME:-authdb}
+      POSTGRES_USER: todouser
+      POSTGRES_PASSWORD: todopass
+      POSTGRES_DB: authdb
     volumes:
-      - D:\experiment\env-a\postgres_auth_data:/var/lib/postgresql/data
-      - D:\experiment\env-a\init-auth.sql:/docker-entrypoint-initdb.d/init.sql
+      - postgres_auth_data:/var/lib/postgresql/data
+      - ./init-auth.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
-      - "5432:5432"
+      - "5434:5432"
     networks:
       - todo-network
     deploy:
@@ -30,23 +31,23 @@ services:
         limits:
           memory: 512M
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
-      interval: 5s
+      test: ["CMD-SHELL", "pg_isready -U todouser -d authdb"]
+      interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 10s
+      start_period: 20s
 
   postgres-todo:
-    image: postgres:15-alpine
+    image: postgres:15
     container_name: postgres-todo
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${TODO_DB_USER:-todouser}
-      POSTGRES_PASSWORD: ${TODO_DB_PASSWORD:-todopass}
-      POSTGRES_DB: ${TODO_DB_NAME:-tododb}
+      POSTGRES_USER: todouser
+      POSTGRES_PASSWORD: todopass
+      POSTGRES_DB: tododb
     volumes:
-      - D:\experiment\env-a\postgres_todo_data:/var/lib/postgresql/data
-      - D:\experiment\env-a\init-todo.sql:/docker-entrypoint-initdb.d/init.sql
+      - postgres_todo_data:/var/lib/postgresql/data
+      - ./init-todo.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "5433:5432"
     networks:
@@ -56,19 +57,19 @@ services:
         limits:
           memory: 512M
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
-      interval: 5s
+      test: ["CMD-SHELL", "pg_isready -U todouser -d tododb"]
+      interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 10s
+      start_period: 20s
 
   redis:
-    image: redis:7-alpine
+    image: redis:7
     container_name: todo-redis
     restart: unless-stopped
     command: redis-server --appendonly yes
     volumes:
-      - D:\experiment\env-a\redis_data:/data
+      - redis_data:/data
     ports:
       - "6379:6379"
     networks:
@@ -76,76 +77,128 @@ services:
     deploy:
       resources:
         limits:
-          memory: 512M
-
-  # ==============================
-  # APPLICATION SERVICES (Microservices)
-  # ==============================
+          memory: 256M
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
 
   auth-service:
     build:
-      context: D:\experiment\env-a\auth-service
+      context: ./auth-service
       dockerfile: Dockerfile
     container_name: auth-service
     restart: unless-stopped
-    env_file:
-      - D:\experiment\env-a\.env
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATABASE_HOST=postgres-auth
+      - DATABASE_PORT=5432
+      - POSTGRES_USER=todouser
+      - POSTGRES_PASSWORD=todopass
+      - POSTGRES_DB=authdb
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=research_secret_key_2024_change_this
+      - JWT_EXPIRY=24h
+      - FRONTEND_URL=http://localhost:8080
     ports:
-      - "3001:3001"
+      - "3000:3000"
+    depends_on:
+      - postgres-auth
+      - redis
     networks:
       - todo-network
-    depends_on:
-      postgres-auth:
-        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"require('http').get('http://localhost:3000/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})\""]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 45s
 
   todo-service:
     build:
-      context: D:\experiment\env-a\todo-service
+      context: ./todo-service
       dockerfile: Dockerfile
     container_name: todo-service
     restart: unless-stopped
-    env_file:
-      - D:\experiment\env-a\.env
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - DATABASE_HOST=postgres-todo
+      - DATABASE_PORT=5432
+      - POSTGRES_USER=todouser
+      - POSTGRES_PASSWORD=todopass
+      - POSTGRES_DB=tododb
+      - REDIS_URL=redis://redis:6379
+      - AUTH_SERVICE_URL=http://auth-service:3000
+      - FRONTEND_URL=http://localhost:8080
     ports:
-      - "3002:3002"
+      - "3001:3001"
+    depends_on:
+      - postgres-todo
+      - redis
+      - auth-service
     networks:
       - todo-network
-    depends_on:
-      postgres-todo:
-        condition: service_healthy
-      redis:
-        condition: service_started
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"require('http').get('http://localhost:3001/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})\""]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 45s
 
   notification-service:
     build:
-      context: D:\experiment\env-a\notification-service
+      context: ./notification-service
       dockerfile: Dockerfile
     container_name: notification-service
     restart: unless-stopped
-    env_file:
-      - D:\experiment\env-a\.env
+    environment:
+      - NODE_ENV=production
+      - PORT=3002
+      - REDIS_URL=redis://redis:6379
+      - TODO_SERVICE_URL=http://todo-service:3001
     ports:
-      - "3003:3003"
+      - "3002:3002"
+    depends_on:
+      - redis
+      - todo-service
     networks:
       - todo-network
-    depends_on:
-      redis:
-        condition: service_started
-
-  # ==============================
-  # FRONTEND SERVICE
-  # ==============================
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"require('http').get('http://localhost:3002/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})\""]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 45s
 
   frontend:
     build:
-      context: D:\experiment\env-a\frontend
+      context: ./frontend
       dockerfile: Dockerfile
     container_name: todo-frontend
     restart: unless-stopped
     ports:
-      - "80:80"
-    networks:
-      - todo-network
+      - "8080:80"
     depends_on:
       - auth-service
       - todo-service
+    networks:
+      - todo-network
+    deploy:
+      resources:
+        limits:
+          memory: 256M

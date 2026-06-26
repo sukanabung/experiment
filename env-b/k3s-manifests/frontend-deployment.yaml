@@ -2,9 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: frontend
-  namespace: todo-research
-  labels:
-    app: frontend
+  namespace: todo-app
 spec:
   replicas: 1
   selector:
@@ -17,14 +15,6 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: frontend:latest
-          imagePullPolicy: IfNotPresent
+          image: todo-frontend:latest
           ports:
             - containerPort: 80
-          resources:
-            requests:
-              memory: "128Mi"
-              cpu: "150m"
-            limits:
-              memory: "256Mi"
-              cpu: "300m"

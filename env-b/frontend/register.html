@@ -24,10 +24,8 @@
     </div>
 
     <script>
-        // API endpoint - works both in Docker (hostname) and localhost
-        const AUTH_API = window.location.hostname === 'localhost' 
-            ? 'http://localhost:3003/auth'
-            : `http://${window.location.hostname}:3003/auth`;
+        // Use relative API route so nginx proxy forwards requests to auth-service.
+        const AUTH_API = '/api/auth';
 
         async function handleRegister() {
             const username = document.getElementById('username').value;

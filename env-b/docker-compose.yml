@@ -1,9 +1,7 @@
-# Catatan: Atribut 'version' dihapus agar tidak memunculkan peringatan usang
-
 networks:
   todo-network:
     name: todo-network
- 
+
 volumes:
   postgres_auth_data:
     name: postgres_auth_data
@@ -11,12 +9,8 @@ volumes:
     name: postgres_todo_data
   redis_data:
     name: redis_data
- 
+
 services:
-  # ==============================
-  # DATABASE SERVICES (Linux Mode)
-  # ==============================
- 
   postgres-auth:
     image: postgres:15
     container_name: postgres-auth
@@ -29,7 +23,7 @@ services:
       - postgres_auth_data:/var/lib/postgresql/data
       - ./init-auth.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
-      - "5432:5432" # Menggunakan port 5432 agar aman jika komputer Anda dipasang Postgres lokal
+      - "5434:5432"
     networks:
       - todo-network
     deploy:
@@ -42,7 +36,7 @@ services:
       timeout: 5s
       retries: 5
       start_period: 20s
- 
+
   postgres-todo:
     image: postgres:15
     container_name: postgres-todo
@@ -55,7 +49,7 @@ services:
       - postgres_todo_data:/var/lib/postgresql/data
       - ./init-todo.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
-      - "5432:5432"
+      - "5433:5432"
     networks:
       - todo-network
     deploy:
@@ -68,7 +62,7 @@ services:
       timeout: 5s
       retries: 5
       start_period: 20s
- 
+
   redis:
     image: redis:7
     container_name: todo-redis
@@ -89,11 +83,7 @@ services:
       interval: 10s
       timeout: 3s
       retries: 5
- 
-  # ==============================
-  # MICROSERVICES (Linux Mode)
-  # ==============================
- 
+
   auth-service:
     build:
       context: ./auth-service
@@ -109,16 +99,14 @@ services:
       - POSTGRES_PASSWORD=todopass
       - POSTGRES_DB=authdb
       - REDIS_URL=redis://redis:6379
-      - JWT_SECRET=rahasia
+      - JWT_SECRET=research_secret_key_2024_change_this
       - JWT_EXPIRY=24h
       - FRONTEND_URL=http://localhost:8080
     ports:
       - "3000:3000"
     depends_on:
-      postgres-auth:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
+      - postgres-auth
+      - redis
     networks:
       - todo-network
     deploy:
@@ -126,12 +114,12 @@ services:
         limits:
           memory: 512M
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      test: ["CMD-SHELL", "node -e \"require('http').get('http://localhost:3000/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})\""]
       interval: 30s
       timeout: 5s
       retries: 3
-      start_period: 30s
- 
+      start_period: 45s
+
   todo-service:
     build:
       context: ./todo-service
@@ -152,12 +140,9 @@ services:
     ports:
       - "3001:3001"
     depends_on:
-      postgres-todo:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-      auth-service:
-        condition: service_healthy
+      - postgres-todo
+      - redis
+      - auth-service
     networks:
       - todo-network
     deploy:
@@ -165,12 +150,12 @@ services:
         limits:
           memory: 512M
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3001/health"]
+      test: ["CMD-SHELL", "node -e \"require('http').get('http://localhost:3001/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})\""]
       interval: 30s
       timeout: 5s
       retries: 3
-      start_period: 30s
- 
+      start_period: 45s
+
   notification-service:
     build:
       context: ./notification-service
@@ -185,10 +170,8 @@ services:
     ports:
       - "3002:3002"
     depends_on:
-      redis:
-        condition: service_healthy
-      todo-service:
-        condition: service_healthy
+      - redis
+      - todo-service
     networks:
       - todo-network
     deploy:
@@ -196,12 +179,12 @@ services:
         limits:
           memory: 256M
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3002/health"]
+      test: ["CMD-SHELL", "node -e \"require('http').get('http://localhost:3002/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})\""]
       interval: 30s
       timeout: 5s
       retries: 3
-      start_period: 30s
- 
+      start_period: 45s
+
   frontend:
     build:
       context: ./frontend
@@ -211,10 +194,8 @@ services:
     ports:
       - "8080:80"
     depends_on:
-      auth-service:
-        condition: service_healthy
-      todo-service:
-        condition: service_healthy
+      - auth-service
+      - todo-service
     networks:
       - todo-network
     deploy:

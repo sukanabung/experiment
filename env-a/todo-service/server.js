@@ -10,6 +10,7 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 3001;
 
+app.set('trust proxy', 1);
 app.use(helmet());
 app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:8080',
@@ -34,6 +35,21 @@ const pool = new Pool({
   connectionTimeoutMillis: 2000,
 });
 
+async function ensureSchema() {
+  try {
+    await pool.query(`ALTER TABLE todos ADD COLUMN IF NOT EXISTS card_color TEXT DEFAULT '#cddc39';`);
+    await pool.query(`UPDATE todos SET card_color = '#cddc39' WHERE card_color IS NULL;`);
+    console.log('✅ todo-service schema check complete');
+  } catch (err) {
+    console.error('❌ Schema migration failed:', err);
+    throw err;
+  }
+}
+
+ensureSchema().catch((err) => {
+  console.error('Failed to ensure database schema on startup', err);
+});
+
 const redisClient = redis.createClient({
   url: process.env.REDIS_URL || 'redis://redis:6379',
   socket: {
@@ -46,6 +62,29 @@ redisClient.on('connect', () => console.log('Redis Connected'));
 redisClient.connect();
 
 const AUTH_SERVICE_URL = process.env.AUTH_SERVICE_URL || 'http://auth-service:3000';
+
+function mapTodoRow(row) {
+  const dueDate = row.due_date || null;
+  const completedAt = row.completed_at || null;
+  const createdAt = row.created_at || null;
+  const updatedAt = row.updated_at || null;
+
+  return {
+    _id: row.id ? row.id.toString() : undefined,
+    id: row.id ? row.id.toString() : undefined,
+    userId: row.user_id,
+    title: row.title,
+    description: row.description || '-',
+    deadline: dueDate ? new Date(dueDate).toISOString() : null,
+    cardColor: row.card_color || '#cddc39',
+    isCompleted: row.completed,
+    timestamps: {
+      createdOn: createdAt ? new Date(createdAt).toISOString() : null,
+      modifiedOn: updatedAt ? new Date(updatedAt).toISOString() : null,
+      completedOn: completedAt ? new Date(completedAt).toISOString() : null,
+    }
+  };
+}
 
 app.get('/health', async (req, res) => {
   try {
@@ -109,9 +148,10 @@ app.get('/api/todos', authenticateToken, async (req, res) => {
       'SELECT * FROM todos WHERE user_id = $1 ORDER BY created_at DESC',
       [req.userId]
     );
+    const todos = result.rows.map(mapTodoRow);
     res.json({
-      todos: result.rows,
-      count: result.rows.length
+      todos,
+      count: todos.length
     });
   } catch (error) {
     console.error('Get todos error:', error);
@@ -130,7 +170,7 @@ app.get('/api/todos/:id', authenticateToken, async (req, res) => {
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Todo not found' });
     }
-    res.json(result.rows[0]);
+    res.json(mapTodoRow(result.rows[0]));
   } catch (error) {
     console.error('Get todo error:', error);
     res.status(500).json({ error: 'Failed to fetch todo' });
@@ -139,19 +179,19 @@ app.get('/api/todos/:id', authenticateToken, async (req, res) => {
 
 app.post('/api/todos', authenticateToken, async (req, res) => {
   try {
-    const { title, description, due_date } = req.body;
+    const { title, description = 'N/A', deadline, cardColor = '#cddc39' } = req.body;
     if (!title) {
       return res.status(400).json({ error: 'Title is required' });
     }
 
     const result = await pool.query(
-      `INSERT INTO todos (user_id, title, description, due_date)
-       VALUES ($1, $2, $3, $4)
+      `INSERT INTO todos (user_id, title, description, due_date, card_color)
+       VALUES ($1, $2, $3, $4, $5)
        RETURNING *`,
-      [req.userId, title, description, due_date]
+      [req.userId, title, description || 'N/A', deadline || null, cardColor]
     );
 
-    const todo = result.rows[0];
+    const todo = mapTodoRow(result.rows[0]);
 
     try {
       await redisClient.publish(
@@ -177,7 +217,7 @@ app.post('/api/todos', authenticateToken, async (req, res) => {
 app.put('/api/todos/:id', authenticateToken, async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, description, completed, due_date } = req.body;
+    const { title, description, completed, deadline, cardColor } = req.body;
 
     const checkResult = await pool.query(
       'SELECT * FROM todos WHERE id = $1 AND user_id = $2',
@@ -204,9 +244,13 @@ app.put('/api/todos/:id', authenticateToken, async (req, res) => {
       updates.push(`completed = $${paramCount++}`);
       values.push(completed);
     }
-    if (due_date !== undefined) {
+    if (deadline !== undefined) {
       updates.push(`due_date = $${paramCount++}`);
-      values.push(due_date);
+      values.push(deadline);
+    }
+    if (cardColor !== undefined) {
+      updates.push(`card_color = $${paramCount++}`);
+      values.push(cardColor);
     }
 
     updates.push(`updated_at = NOW()`);
@@ -224,10 +268,35 @@ app.put('/api/todos/:id', authenticateToken, async (req, res) => {
     `;
 
     const result = await pool.query(query, values);
-    res.json(result.rows[0]);
+    res.json(mapTodoRow(result.rows[0]));
   } catch (error) {
     console.error('Update todo error:', error);
     res.status(500).json({ error: 'Failed to update todo' });
+  }
+});
+
+app.patch('/api/todos/:id', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const todoResult = await pool.query('SELECT * FROM todos WHERE id = $1 AND user_id = $2', [id, req.userId]);
+    if (!todoResult.rows.length) {
+      return res.status(404).json({ error: 'Todo not found' });
+    }
+
+    const currentTodo = todoResult.rows[0];
+    const currentCompleted = currentTodo.completed;
+    const nextStatus = !currentCompleted;
+    const updateResult = await pool.query(
+      nextStatus
+        ? 'UPDATE todos SET completed = $1, updated_at = NOW(), completed_at = NOW() WHERE id = $2 AND user_id = $3 RETURNING *'
+        : 'UPDATE todos SET completed = $1, updated_at = NOW(), completed_at = NULL WHERE id = $2 AND user_id = $3 RETURNING *',
+      [nextStatus, id, req.userId]
+    );
+
+    res.json(mapTodoRow(updateResult.rows[0]));
+  } catch (error) {
+    console.error('Patch todo error:', error);
+    res.status(500).json({ error: 'Failed to update todo status' });
   }
 });
 
